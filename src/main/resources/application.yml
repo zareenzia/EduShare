@@ -11,6 +11,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  gcp:
+    bucket:
+      name: edushare-files
+    credentials:
+      path: classpath:service-account.json
 
 server:
   port: 8081
