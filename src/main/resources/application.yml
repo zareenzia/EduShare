@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/edu_share_db
     username: root
-    password: userAdmin
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -19,6 +19,6 @@ spring:
       name: edushare-files
 
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /

@@ -12,7 +12,7 @@ import java.io.IOException;
 @Service
 public class GCSFileService {
 
-    @Value("${gcp.bucket.name}")
+    @Value("${spring.gcp.bucket.name}")
     private String bucketName;
 
     private final Storage storage;

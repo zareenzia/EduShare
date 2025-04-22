@@ -17,12 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Component
-@EnableConfigurationProperties
 @Data
 @Slf4j
-@ConfigurationProperties(prefix = "gcp.storage.credentials")
 public class CloudStorageCredentialsConfig {
-    @Value("${gcp.credentials.path}")
+    @Value("${spring.gcp.storage.credentials.credentialsPath}")
     private String credentialsPath;
 
     @Bean
