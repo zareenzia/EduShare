@@ -12,10 +12,11 @@ spring:
       ddl-auto: update
     show-sql: true
   gcp:
+    storage:
+      credentials:
+        credentialsPath: data-oasis-457605-k8-90a116324e58.json
     bucket:
       name: edushare-files
-    credentials:
-      path: classpath:service-account.json
 
 server:
   port: 8081
