@@ -7,8 +7,18 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  gcp:
+    storage:
+      credentials:
+        credentialsPath: data-oasis-457605-k8-90a116324e58.json
+    bucket:
+      name: edushare-files
 
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /
