@@ -1,5 +1,6 @@
 package com.edushare.file_sharing_app_backend.service;
 
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
@@ -31,5 +32,13 @@ public class GCSFileService {
 
         // Return public URL (if object is public)
         return String.format("https://storage.googleapis.com/%s/%s", bucketName, objectName);
+    }
+
+    public byte[] downloadFile(String fileName) throws IOException {
+        Blob blob = storage.get(BlobId.of(bucketName, fileName));
+        if (blob == null) {
+            throw new IOException("File not found in GCP bucket");
+        }
+        return blob.getContent();
     }
 }
