@@ -2,17 +2,17 @@ package com.edushare.file_sharing_app_backend.service;
 
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class FileService {
 
-    @Autowired
-    private FileMetadataRepository repository;
+    private final FileMetadataRepository repository;
 
     public FileMetadata saveFile(MultipartFile file, String title, String courseName, String instructor,
                                  String semester, String tags) throws Exception {
