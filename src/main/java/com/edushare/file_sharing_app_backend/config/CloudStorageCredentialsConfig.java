@@ -7,16 +7,14 @@ import com.google.cloud.storage.StorageOptions;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@Component
+@Configuration
 @Data
 @Slf4j
 public class CloudStorageCredentialsConfig {
@@ -30,7 +28,7 @@ public class CloudStorageCredentialsConfig {
             GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccountStream);
             return StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         } catch (IOException e){
-            log.warn("Error !!!!!!!!");
+            log.error("Error loading Google Cloud Storage credentials", e);
             throw e;
         }
 
