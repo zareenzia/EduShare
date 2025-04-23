@@ -4,8 +4,7 @@ import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.service.GCSFileService;
 import com.edushare.file_sharing_app_backend.util.FileUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,12 +68,14 @@ public class FileUploadController {
         try {
             byte[] fileData = fileService.downloadFile(fileName);
 
-            final String contentType = FileUtil.getFileContentType(fileName);
+            MediaType mediaType = MediaTypeFactory.getMediaType(fileName)
+                    .orElse(MediaType.APPLICATION_OCTET_STREAM);
 
             return ResponseEntity.ok()
-                    .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
-                    .header("Content-Type", contentType)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
                     .body(fileData);
+
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
