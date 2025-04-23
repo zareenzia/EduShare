@@ -24,7 +24,11 @@ public class FileUploadController {
 
     private final GCSFileService fileService;
 
-    @PostMapping("/upload")
+    public static final String API_PATH_FILE_LIST = "/list";
+    public static final String API_PATH_FILE_UPLOAD = "/upload";
+    public static final String API_PATH_FILE_DOWNLOAD = "/download";
+
+    @PostMapping(path = API_PATH_FILE_UPLOAD)
     public ResponseEntity<String> uploadFileWithMetadata(
             @RequestParam("file") MultipartFile file,
             @RequestParam("title") String title,
@@ -60,7 +64,7 @@ public class FileUploadController {
         }
     }
 
-    @GetMapping("/download")
+    @GetMapping(path = API_PATH_FILE_DOWNLOAD)
     public ResponseEntity<byte[]> download(@RequestParam("fileName") String fileName) {
         try {
             byte[] fileData = fileService.downloadFile(fileName);
@@ -76,7 +80,7 @@ public class FileUploadController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping(path = API_PATH_FILE_LIST)
     public ResponseEntity<List<String>> listFiles() {
         try {
             List<String> files = fileService.listAllFiles();
