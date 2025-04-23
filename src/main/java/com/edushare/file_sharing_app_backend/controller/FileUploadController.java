@@ -2,7 +2,6 @@ package com.edushare.file_sharing_app_backend.controller;
 
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.service.GCSFileService;
-import com.edushare.file_sharing_app_backend.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,9 +81,12 @@ public class FileUploadController {
     }
 
     @GetMapping(path = API_PATH_FILE_LIST)
-    public ResponseEntity<List<FileMetadata>> listFiles() {
+    public ResponseEntity<List<FileMetadata>> listFiles(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
         try {
-            List<FileMetadata> files = fileService.listAllFilesWithMetadata();
+            List<FileMetadata> files = fileService.listAllFilesWithMetadata(page, size);
             return ResponseEntity.ok(files);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
