@@ -1,15 +1,13 @@
-CREATE TABLE file_metadata
-(
-    id          bigint       NOT NULL auto_increment PRIMARY KEY,
-    title       varchar(255) NOT NULL,
-    course_name varchar(255) NOT NULL,
-    instructor  varchar(255) NOT NULL,
-    semester    varchar(100) NOT NULL,
-    tags        varchar(500),
-    file_name   varchar(255) NOT NULL,
-    file_type   varchar(100),
-    file_size   bigint,
-    uploaded_at datetime,
-    file_data   longblob
+CREATE TABLE file_metadata (
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title        VARCHAR(255) NOT NULL,
+    course_name  VARCHAR(255) NOT NULL,
+    instructor   VARCHAR(255) NOT NULL,
+    semester     VARCHAR(100) NOT NULL,
+    tags         VARCHAR(500),
+    file_name    VARCHAR(255) NOT NULL,
+    file_type    VARCHAR(100),
+    file_size    BIGINT,
+    uploaded_at  DATETIME,
+    gcs_url      VARCHAR(500)
 );
-
