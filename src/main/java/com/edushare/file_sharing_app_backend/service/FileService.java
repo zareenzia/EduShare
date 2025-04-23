@@ -26,7 +26,6 @@ public class FileService {
                 .fileType(file.getContentType())
                 .fileSize(file.getSize())
                 .uploadedAt(LocalDateTime.now())
-                .data(file.getBytes())
                 .build();
 
         return repository.save(metadata);

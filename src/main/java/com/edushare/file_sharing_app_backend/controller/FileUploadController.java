@@ -1,5 +1,6 @@
 package com.edushare.file_sharing_app_backend.controller;
 
+import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.service.GCSFileService;
 import com.edushare.file_sharing_app_backend.util.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/files")
@@ -22,10 +25,32 @@ public class FileUploadController {
     private final GCSFileService fileService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFileWithMetadata(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("title") String title,
+            @RequestParam("courseName") String courseName,
+            @RequestParam("instructor") String instructor,
+            @RequestParam("semester") String semester,
+            @RequestParam(value = "tags", required = false) String tags
+    ) {
         try {
-            String fileUrl = fileService.uploadFile(file, file.getOriginalFilename());
-            return ResponseEntity.ok(fileUrl);
+            String gcsUrl = fileService.uploadFile(file, file.getOriginalFilename());
+
+            FileMetadata metadata = FileMetadata.builder()
+                    .title(title)
+                    .courseName(courseName)
+                    .instructor(instructor)
+                    .semester(semester)
+                    .tags(tags)
+                    .fileName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .fileSize(file.getSize())
+                    .uploadedAt(LocalDateTime.now())
+                    .gcsUrl(gcsUrl)
+                    .build();
+
+            fileService.saveMetadata(metadata);
+            return ResponseEntity.ok("File uploaded and metadata saved.");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed");
         }
@@ -44,6 +69,16 @@ public class FileUploadController {
                     .body(fileData);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<String>> listFiles() {
+        try {
+            List<String> files = fileService.listAllFiles();
+            return ResponseEntity.ok(files);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

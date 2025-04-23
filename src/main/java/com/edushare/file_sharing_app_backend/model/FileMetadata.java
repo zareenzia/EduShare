@@ -56,7 +56,6 @@ public class FileMetadata {
     @Column(name = "uploaded_at")
     private LocalDateTime uploadedAt;
 
-    @Lob
-    @Column(name = "file_data", columnDefinition = "LONGBLOB")
-    private byte[] data;
+    @Column(name = "gcs_url")
+    private String gcsUrl;
 }
