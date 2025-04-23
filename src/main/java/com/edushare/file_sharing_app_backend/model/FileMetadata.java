@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +33,12 @@ public class FileMetadata {
 
     @Column(name = "course_name", nullable = false)
     private String courseName;
+
+    @Column(name = "course_code", nullable = false)
+    private String courseCode;
+
+    @Column(name = "department")
+    private String department;
 
     @Column(name = "instructor", nullable = false)
     private String instructor;

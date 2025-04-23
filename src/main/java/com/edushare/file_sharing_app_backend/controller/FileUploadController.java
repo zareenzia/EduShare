@@ -31,6 +31,8 @@ public class FileUploadController {
             @RequestParam("courseName") String courseName,
             @RequestParam("instructor") String instructor,
             @RequestParam("semester") String semester,
+            @RequestParam("courseCode") String courseCode,
+            @RequestParam("department") String department,
             @RequestParam(value = "tags", required = false) String tags
     ) {
         try {
@@ -40,6 +42,8 @@ public class FileUploadController {
                     .title(title)
                     .courseName(courseName)
                     .instructor(instructor)
+                    .courseCode(courseCode)
+                    .department(department)
                     .semester(semester)
                     .tags(tags)
                     .fileName(file.getOriginalFilename())
