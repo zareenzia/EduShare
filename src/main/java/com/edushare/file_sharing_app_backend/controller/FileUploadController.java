@@ -81,9 +81,9 @@ public class FileUploadController {
     }
 
     @GetMapping(path = API_PATH_FILE_LIST)
-    public ResponseEntity<List<String>> listFiles() {
+    public ResponseEntity<List<FileMetadata>> listFiles() {
         try {
-            List<String> files = fileService.listAllFiles();
+            List<FileMetadata> files = fileService.listAllFilesWithMetadata();
             return ResponseEntity.ok(files);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

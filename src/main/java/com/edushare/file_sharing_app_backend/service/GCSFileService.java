@@ -43,13 +43,15 @@ public class GCSFileService {
         return blob.getContent();
     }
 
-    public List<String> listAllFiles() {
+    public List<FileMetadata> listAllFilesWithMetadata() {
         Bucket bucket = storage.get(bucketName);
         Iterable<Blob> blobs = bucket.list().iterateAll();
 
-        return StreamSupport.stream(blobs.spliterator(), false)
+        List<String> filenames = StreamSupport.stream(blobs.spliterator(), false)
                 .map(Blob::getName)
                 .collect(Collectors.toList());
+
+        return metadataRepository.findByFileNameIn(filenames);
     }
 
 }
