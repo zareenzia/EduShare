@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -45,22 +46,26 @@ public class GCSFileService {
         return blob.getContent();
     }
 
-    public List<FileMetadata> listAllFilesWithMetadata(int page, int size) {
-        Bucket bucket = storage.get(bucketName);
-        Iterable<Blob> blobs = bucket.list().iterateAll();
+public List<FileMetadata> listAllFilesWithMetadata(int page, int size) {
+    Bucket bucket = storage.get(bucketName);
+    Iterable<Blob> blobs = bucket.list().iterateAll();
 
-        List<String> allFilenames = StreamSupport.stream(blobs.spliterator(), false)
-                .map(Blob::getName)
-                .collect(Collectors.toList());
+    List<String> allFilenames = StreamSupport.stream(blobs.spliterator(), false)
+            .map(Blob::getName)
+            .collect(Collectors.toList());
 
-        Collections.sort(allFilenames);
-        int fromIndex = Math.min(page * size, allFilenames.size());
-        int toIndex = Math.min(fromIndex + size, allFilenames.size());
-
-        //TODO: Pagination is not working properly
-        List<String> paginatedFilenames = allFilenames.subList(fromIndex, toIndex);
-        Sort sort = Sort.by(Sort.Direction.DESC, "uploadedAt");
-        return metadataRepository.findByFileNameIn(paginatedFilenames, sort);
+    if (allFilenames.isEmpty()) {
+        return Collections.emptyList();
     }
+
+    List<FileMetadata> allMetadata = metadataRepository.findByFileNameIn(allFilenames);
+
+    allMetadata.sort(Comparator.comparing(FileMetadata::getUploadedAt).reversed());
+
+    int fromIndex = Math.min(page * size, allMetadata.size());
+    int toIndex = Math.min(fromIndex + size, allMetadata.size());
+
+    return allMetadata.subList(fromIndex, toIndex);
+}
 
 }

@@ -4,17 +4,14 @@ import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.service.GCSFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
@@ -83,7 +80,7 @@ public class FileUploadController {
     @GetMapping(path = API_PATH_FILE_LIST)
     public ResponseEntity<List<FileMetadata>> listFiles(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "100") int size
     ) {
         try {
             List<FileMetadata> files = fileService.listAllFilesWithMetadata(page, size);
