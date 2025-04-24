@@ -1,6 +1,7 @@
 package com.edushare.file_sharing_app_backend.service;
 
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
+import com.edushare.file_sharing_app_backend.model.PaginatedResponse;
 import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
 import com.google.cloud.storage.*;
 import lombok.RequiredArgsConstructor;
@@ -46,26 +47,38 @@ public class GCSFileService {
         return blob.getContent();
     }
 
-public List<FileMetadata> listAllFilesWithMetadata(int page, int size) {
-    Bucket bucket = storage.get(bucketName);
-    Iterable<Blob> blobs = bucket.list().iterateAll();
+    public PaginatedResponse<FileMetadata> listAllFilesWithMetadata(int page, int size) {
+        Bucket bucket = storage.get(bucketName);
+        Iterable<Blob> blobs = bucket.list().iterateAll();
 
-    List<String> allFilenames = StreamSupport.stream(blobs.spliterator(), false)
-            .map(Blob::getName)
-            .collect(Collectors.toList());
+        List<String> allFilenames = StreamSupport.stream(blobs.spliterator(), false)
+                .map(Blob::getName)
+                .collect(Collectors.toList());
 
-    if (allFilenames.isEmpty()) {
-        return Collections.emptyList();
+        if (allFilenames.isEmpty()) {
+            return new PaginatedResponse<>(Collections.emptyList(), page, size, 0);
+        }
+
+        List<FileMetadata> allMetadata = metadataRepository.findByFileNameIn(allFilenames);
+        allMetadata.sort(Comparator.comparing(FileMetadata::getUploadedAt).reversed());
+
+        int totalItems = allMetadata.size();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        int fromIndex = Math.min(page * size, totalItems);
+        int toIndex = Math.min(fromIndex + size, totalItems);
+
+        List<FileMetadata> paginatedList = allMetadata.subList(fromIndex, toIndex);
+
+        return new PaginatedResponse<>(paginatedList, page, size, totalPages);
+
+//    List<FileMetadata> allMetadata = metadataRepository.findByFileNameIn(allFilenames);
+//
+//    allMetadata.sort(Comparator.comparing(FileMetadata::getUploadedAt).reversed());
+//
+//    int fromIndex = Math.min(page * size, allMetadata.size());
+//    int toIndex = Math.min(fromIndex + size, allMetadata.size());
+//
+//    return allMetadata.subList(fromIndex, toIndex);
     }
-
-    List<FileMetadata> allMetadata = metadataRepository.findByFileNameIn(allFilenames);
-
-    allMetadata.sort(Comparator.comparing(FileMetadata::getUploadedAt).reversed());
-
-    int fromIndex = Math.min(page * size, allMetadata.size());
-    int toIndex = Math.min(fromIndex + size, allMetadata.size());
-
-    return allMetadata.subList(fromIndex, toIndex);
-}
 
 }
