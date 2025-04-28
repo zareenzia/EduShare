@@ -13,3 +13,12 @@ CREATE TABLE file_metadata (
     uploaded_at    DATETIME,
     gcs_url        VARCHAR(500)
 );
+
+
+--User table
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
