@@ -30,11 +30,6 @@ public class UserController {
         return userService.login(request);
     }
 
-//    @GetMapping("/userCount")
-//    public ResponseEntity<Long> getUserCount() {
-//        long count = userService.getTotalUserCount();
-//        return ResponseEntity.ok(count);
-//    }
     @GetMapping("/userCount")
     public ResponseEntity<Map<String, Long>> getUserCount() {
         long count = userService.getTotalUserCount();
