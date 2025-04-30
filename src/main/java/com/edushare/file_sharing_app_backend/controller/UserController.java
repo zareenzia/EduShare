@@ -6,8 +6,13 @@ import com.edushare.file_sharing_app_backend.model.UserLoginRequest;
 import com.edushare.file_sharing_app_backend.model.UserResponse;
 import com.edushare.file_sharing_app_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Map;
+
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -24,5 +29,17 @@ public class UserController {
     public UserResponse login(@RequestBody UserLoginRequest request) {
         return userService.login(request);
     }
+
+//    @GetMapping("/userCount")
+//    public ResponseEntity<Long> getUserCount() {
+//        long count = userService.getTotalUserCount();
+//        return ResponseEntity.ok(count);
+//    }
+    @GetMapping("/userCount")
+    public ResponseEntity<Map<String, Long>> getUserCount() {
+        long count = userService.getTotalUserCount();
+        return ResponseEntity.ok(Collections.singletonMap("count", count));
+    }
+
 }
 

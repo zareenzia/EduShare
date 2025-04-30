@@ -2,6 +2,7 @@ package com.edushare.file_sharing_app_backend.controller;
 
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.model.PaginatedResponse;
+import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
 import com.edushare.file_sharing_app_backend.service.GCSFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -10,19 +11,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
 public class FileUploadController {
 
     private final GCSFileService fileService;
+    private final FileMetadataRepository repository;
 
     public static final String API_PATH_FILE_LIST = "/list";
     public static final String API_PATH_FILE_UPLOAD = "/upload";
     public static final String API_PATH_FILE_DOWNLOAD = "/download";
+    public static final String API_PATH_FILE_COUNT = "/fileCount";
 
     @PostMapping(path = API_PATH_FILE_UPLOAD)
     public ResponseEntity<String> uploadFileWithMetadata(
@@ -91,4 +96,9 @@ public class FileUploadController {
         }
     }
 
+    @GetMapping(path = API_PATH_FILE_COUNT)
+    public ResponseEntity<Map<String, Long>> getFileCount() {
+        long count = repository.count();
+        return ResponseEntity.ok(Collections.singletonMap("count", count));
+    }
 }

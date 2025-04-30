@@ -46,5 +46,10 @@ public class UserService {
         response.setEmail(user.getEmail());
         return response;
     }
+
+    public long getTotalUserCount() {
+        return userRepository.count();
+    }
+
 }
 
