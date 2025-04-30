@@ -19,18 +19,21 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    public static final String API_PATH_USER_REGISTER = "/register";
+    public static final String API_PATH_USER_LOGIN = "/login";
+    public static final String API_PATH_USER_COUNT = "/userCount";
 
-    @PostMapping("/register")
+    @PostMapping(path = API_PATH_USER_REGISTER)
     public UserResponse register(@RequestBody UserRegistrationRequest request) {
         return userService.register(request);
     }
 
-    @PostMapping("/login")
+    @PostMapping(path = API_PATH_USER_LOGIN)
     public UserResponse login(@RequestBody UserLoginRequest request) {
         return userService.login(request);
     }
 
-    @GetMapping("/userCount")
+    @GetMapping(path = API_PATH_USER_COUNT)
     public ResponseEntity<Map<String, Long>> getUserCount() {
         long count = userService.getTotalUserCount();
         return ResponseEntity.ok(Collections.singletonMap("count", count));
