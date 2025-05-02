@@ -86,10 +86,11 @@ public class FileUploadController {
     @GetMapping(path = API_PATH_FILE_LIST)
     public ResponseEntity<PaginatedResponse<FileMetadata>> listFiles(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size
+            @RequestParam(defaultValue = "100") int size,
+            @RequestParam(required = false) String searchTerm
     ) {
         try {
-            PaginatedResponse<FileMetadata> response = fileService.listAllFilesWithMetadata(page, size);
+            PaginatedResponse<FileMetadata> response = fileService.listAllFilesWithMetadata(page, size, searchTerm);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
