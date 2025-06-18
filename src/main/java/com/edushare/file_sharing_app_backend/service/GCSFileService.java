@@ -75,24 +75,7 @@ public class GCSFileService {
         return new PaginatedResponse<>(paginatedList, page, size, totalPages);
     }
 
-//    public ResponseEntity<FileMetadata> getFileMetadataById(Long fileId) {
-//        return metadataRepository.findById(fileId)
-//                        .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-//    }
-
-//    public FileDetailsDto getFileDetailsWithComments(Long fileId) {
-//        FileMetadata file = metadataRepository.findById(fileId)
-//                .orElseThrow(() -> new IllegalArgumentException("File not found with id: " + fileId));
-//        List<Comment> comments = commentRepository.findByFile(file);
-//
-//        return FileDetailsDto.builder()
-//                .fileMetadata(file)
-//                .comments(comments)
-//                .build();
-//    }
-
-    public FileDetailsDto getFileDetailsWithComments(Long fileId) {
+    public FileDetailsDto getFileDetails(Long fileId) {
         FileMetadata file = metadataRepository.findById(fileId)
                 .orElseThrow(() -> new IllegalArgumentException("File not found with id: " + fileId));
         List<Comment> comments = commentRepository.findByFile(file);

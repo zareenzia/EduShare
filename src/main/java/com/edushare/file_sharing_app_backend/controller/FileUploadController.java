@@ -29,7 +29,7 @@ public class FileUploadController {
     public static final String API_PATH_FILE_UPLOAD = "/upload";
     public static final String API_PATH_FILE_DOWNLOAD = "/download";
     public static final String API_PATH_FILE_COUNT = "/fileCount";
-    public static final String API_PATH_FILE_DETAILS = "/fileDetails";
+    public static final String API_PATH_FILE_DETAILS = "/fileDetails/{fileId}";
 
     @PostMapping(path = API_PATH_FILE_UPLOAD)
     public ResponseEntity<String> uploadFileWithMetadata(
@@ -105,10 +105,8 @@ public class FileUploadController {
         return ResponseEntity.ok(Collections.singletonMap("count", count));
     }
 
-    @GetMapping(API_PATH_FILE_DETAILS + "/{fileId}")
+    @GetMapping(path = API_PATH_FILE_DETAILS)
     public FileDetailsDto getFileDetails(@PathVariable Long fileId) {
-        return fileService.getFileDetailsWithComments(fileId);
+        return fileService.getFileDetails(fileId);
     }
-
-
 }
