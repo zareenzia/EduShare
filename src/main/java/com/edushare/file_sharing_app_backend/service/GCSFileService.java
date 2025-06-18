@@ -1,7 +1,7 @@
 package com.edushare.file_sharing_app_backend.service;
 
-import com.edushare.file_sharing_app_backend.model.FileMetadata;
-import com.edushare.file_sharing_app_backend.model.PaginatedResponse;
+import com.edushare.file_sharing_app_backend.model.*;
+import com.edushare.file_sharing_app_backend.repository.CommentRepository;
 import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
 import com.google.cloud.storage.*;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,7 @@ public class GCSFileService {
 
     private final Storage storage;
     private final FileMetadataRepository metadataRepository;
+    private final CommentRepository commentRepository;
     @Value("${spring.gcp.bucket.name}")
     private String bucketName;
 
@@ -74,9 +75,48 @@ public class GCSFileService {
         return new PaginatedResponse<>(paginatedList, page, size, totalPages);
     }
 
-    public ResponseEntity<FileMetadata> getFileMetadataById(Long fileId) {
-        return metadataRepository.findById(fileId)
-                        .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+//    public ResponseEntity<FileMetadata> getFileMetadataById(Long fileId) {
+//        return metadataRepository.findById(fileId)
+//                        .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+//    }
+
+//    public FileDetailsDto getFileDetailsWithComments(Long fileId) {
+//        FileMetadata file = metadataRepository.findById(fileId)
+//                .orElseThrow(() -> new IllegalArgumentException("File not found with id: " + fileId));
+//        List<Comment> comments = commentRepository.findByFile(file);
+//
+//        return FileDetailsDto.builder()
+//                .fileMetadata(file)
+//                .comments(comments)
+//                .build();
+//    }
+
+    public FileDetailsDto getFileDetailsWithComments(Long fileId) {
+        FileMetadata file = metadataRepository.findById(fileId)
+                .orElseThrow(() -> new IllegalArgumentException("File not found with id: " + fileId));
+        List<Comment> comments = commentRepository.findByFile(file);
+
+        FileMetadataDto fileDto = FileMetadataDto.builder()
+                .id(file.getId())
+                .title(file.getTitle())
+                .courseName(file.getCourseName())
+                .courseCode(file.getCourseCode())
+                .department(file.getDepartment())
+                .instructor(file.getInstructor())
+                .semester(file.getSemester())
+                .tags(file.getTags())
+                .fileName(file.getFileName())
+                .fileType(file.getFileType())
+                .fileSize(file.getFileSize())
+                .uploadedAt(file.getUploadedAt())
+                .gcsUrl(file.getGcsUrl())
+                .build();
+
+        return FileDetailsDto.builder()
+                .fileMetadata(fileDto)
+                .comments(comments)
+                .build();
     }
+
 }

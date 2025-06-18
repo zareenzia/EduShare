@@ -1,5 +1,6 @@
 package com.edushare.file_sharing_app_backend.controller;
 
+import com.edushare.file_sharing_app_backend.model.FileDetailsDto;
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.model.PaginatedResponse;
 import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
@@ -105,8 +106,8 @@ public class FileUploadController {
     }
 
     @GetMapping(API_PATH_FILE_DETAILS + "/{fileId}")
-    public ResponseEntity<FileMetadata> getFileDetails(@PathVariable Long fileId) {
-        return fileService.getFileMetadataById(fileId);
+    public FileDetailsDto getFileDetails(@PathVariable Long fileId) {
+        return fileService.getFileDetailsWithComments(fileId);
     }
 
 
