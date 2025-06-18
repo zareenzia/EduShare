@@ -6,6 +6,8 @@ import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
 import com.google.cloud.storage.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -71,4 +74,9 @@ public class GCSFileService {
         return new PaginatedResponse<>(paginatedList, page, size, totalPages);
     }
 
+    public ResponseEntity<FileMetadata> getFileMetadataById(Long fileId) {
+        return metadataRepository.findById(fileId)
+                        .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 }

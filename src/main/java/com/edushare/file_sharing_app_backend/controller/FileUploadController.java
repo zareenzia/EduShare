@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3002")
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
@@ -28,6 +28,7 @@ public class FileUploadController {
     public static final String API_PATH_FILE_UPLOAD = "/upload";
     public static final String API_PATH_FILE_DOWNLOAD = "/download";
     public static final String API_PATH_FILE_COUNT = "/fileCount";
+    public static final String API_PATH_FILE_DETAILS = "/fileDetails";
 
     @PostMapping(path = API_PATH_FILE_UPLOAD)
     public ResponseEntity<String> uploadFileWithMetadata(
@@ -102,4 +103,11 @@ public class FileUploadController {
         long count = repository.count();
         return ResponseEntity.ok(Collections.singletonMap("count", count));
     }
+
+    @GetMapping(API_PATH_FILE_DETAILS + "/{fileId}")
+    public ResponseEntity<FileMetadata> getFileDetails(@PathVariable Long fileId) {
+        return fileService.getFileMetadataById(fileId);
+    }
+
+
 }
