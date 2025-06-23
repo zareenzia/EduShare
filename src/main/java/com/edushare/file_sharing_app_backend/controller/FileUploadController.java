@@ -1,7 +1,9 @@
 package com.edushare.file_sharing_app_backend.controller;
 
+import com.edushare.file_sharing_app_backend.model.FileDetailsDto;
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.model.PaginatedResponse;
+import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
 import com.edushare.file_sharing_app_backend.service.GCSFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
@@ -10,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -19,10 +23,13 @@ import java.util.List;
 public class FileUploadController {
 
     private final GCSFileService fileService;
+    private final FileMetadataRepository repository;
 
     public static final String API_PATH_FILE_LIST = "/list";
     public static final String API_PATH_FILE_UPLOAD = "/upload";
     public static final String API_PATH_FILE_DOWNLOAD = "/download";
+    public static final String API_PATH_FILE_COUNT = "/fileCount";
+    public static final String API_PATH_FILE_DETAILS = "/fileDetails/{fileId}";
 
     @PostMapping(path = API_PATH_FILE_UPLOAD)
     public ResponseEntity<String> uploadFileWithMetadata(
@@ -81,14 +88,25 @@ public class FileUploadController {
     @GetMapping(path = API_PATH_FILE_LIST)
     public ResponseEntity<PaginatedResponse<FileMetadata>> listFiles(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "100") int size
+            @RequestParam(defaultValue = "100") int size,
+            @RequestParam(required = false) String searchTerm
     ) {
         try {
-            PaginatedResponse<FileMetadata> response = fileService.listAllFilesWithMetadata(page, size);
+            PaginatedResponse<FileMetadata> response = fileService.listAllFilesWithMetadata(page, size, searchTerm);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    @GetMapping(path = API_PATH_FILE_COUNT)
+    public ResponseEntity<Map<String, Long>> getFileCount() {
+        long count = repository.count();
+        return ResponseEntity.ok(Collections.singletonMap("count", count));
+    }
+
+    @GetMapping(path = API_PATH_FILE_DETAILS)
+    public FileDetailsDto getFileDetails(@PathVariable Long fileId) {
+        return fileService.getFileDetails(fileId);
+    }
 }

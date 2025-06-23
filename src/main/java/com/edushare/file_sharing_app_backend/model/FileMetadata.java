@@ -1,18 +1,15 @@
 package com.edushare.file_sharing_app_backend.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -63,4 +60,9 @@ public class FileMetadata {
 
     @Column(name = "gcs_url")
     private String gcsUrl;
+
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Comment> comments;
+
 }
