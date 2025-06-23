@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3002")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor

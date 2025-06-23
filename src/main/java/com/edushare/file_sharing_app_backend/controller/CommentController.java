@@ -4,6 +4,7 @@ import com.edushare.file_sharing_app_backend.model.Comment;
 import com.edushare.file_sharing_app_backend.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,8 @@ public class CommentController {
     public static final String API_PATH_COMMENT_ADD = "/add";
     public static final String API_PATH_COMMENT_GET = "/file/{fileId}";
 
-    @PostMapping(path = API_PATH_COMMENT_ADD)
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping(path = API_PATH_COMMENT_ADD, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Comment> addComment(@RequestParam Long fileId,
                                               @RequestParam String username,
                                               @RequestParam String text) {
