@@ -1,5 +1,6 @@
 package com.edushare.file_sharing_app_backend.controller;
 
+import com.edushare.file_sharing_app_backend.model.FileDetailsDto;
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
 import com.edushare.file_sharing_app_backend.model.PaginatedResponse;
 import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
@@ -15,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class FileUploadController {
     public static final String API_PATH_FILE_UPLOAD = "/upload";
     public static final String API_PATH_FILE_DOWNLOAD = "/download";
     public static final String API_PATH_FILE_COUNT = "/fileCount";
+    public static final String API_PATH_FILE_DETAILS = "/fileDetails/{fileId}";
 
     @PostMapping(path = API_PATH_FILE_UPLOAD)
     public ResponseEntity<String> uploadFileWithMetadata(
@@ -101,5 +103,10 @@ public class FileUploadController {
     public ResponseEntity<Map<String, Long>> getFileCount() {
         long count = repository.count();
         return ResponseEntity.ok(Collections.singletonMap("count", count));
+    }
+
+    @GetMapping(path = API_PATH_FILE_DETAILS)
+    public FileDetailsDto getFileDetails(@PathVariable Long fileId) {
+        return fileService.getFileDetails(fileId);
     }
 }
