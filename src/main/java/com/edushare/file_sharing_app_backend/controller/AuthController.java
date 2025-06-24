@@ -18,7 +18,7 @@ import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.INVALI
 import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.USERNAME_PASSWORD_CAN_NOT_BE_NULL;
 
 @RestController()
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
