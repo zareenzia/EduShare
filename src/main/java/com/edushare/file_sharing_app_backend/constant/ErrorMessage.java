@@ -10,6 +10,7 @@ public final class ErrorMessage {
     public static final String INVALID_FILE_TYPE = "Invalid file type";
     public static final String ACCESS_DENIED = "Access denied";
     public static final String USERNAME_PASSWORD_CAN_NOT_BE_NULL = "Username and password must not be null";
+    public static final String ACCOUNT_SUSPENDED = "Account is suspended.";
 
     private ErrorMessage() {
         // Prevent instantiation

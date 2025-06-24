@@ -4,14 +4,25 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.ACCOUNT_SUSPENDED;
+
 @Component
+@RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+    private final CustomUserDetailService customUserDetailService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -19,9 +30,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (Objects.nonNull(jwt)){
             try {
-               //TODO: Implement JWT validation logic here
+                final String usernameFromToken = jwtTokenUtil.getUsernameFromToken(jwt);
+
+                if (Objects.nonNull(usernameFromToken) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    final UserDetails userDetails = customUserDetailService.loadUserByUsername(usernameFromToken);
+                    if (!userDetails.isEnabled()) {
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN, ACCOUNT_SUSPENDED);
+                    }
+
+                    if (Boolean.TRUE.equals(jwtTokenUtil.validateToken(jwt, userDetails))) {
+                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    }
+                }
             } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                return;
             }
         }
         filterChain.doFilter(request,response);
