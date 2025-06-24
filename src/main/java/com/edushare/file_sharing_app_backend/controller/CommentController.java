@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentController {
-
     private final CommentService commentService;
 
     public static final String API_PATH_COMMENT_ADD = "/add";
     public static final String API_PATH_COMMENT_GET = "/file/{fileId}";
+    private static final String API_PATH_COMMENT_DELETE = "/delete/{id}";
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @PostMapping(path = API_PATH_COMMENT_ADD, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Comment> addComment(@RequestParam Long fileId,
                                               @RequestParam String username,
@@ -41,5 +42,11 @@ public class CommentController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @DeleteMapping(path = API_PATH_COMMENT_DELETE)
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
+        return ResponseEntity.ok().build();
     }
 }

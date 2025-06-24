@@ -37,4 +37,8 @@ public class CommentService {
 
         return commentRepository.findByFile(file);
     }
+
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
+    }
 }
