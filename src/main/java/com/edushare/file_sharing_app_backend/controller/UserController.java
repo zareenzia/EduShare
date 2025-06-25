@@ -22,6 +22,7 @@ public class UserController {
     public static final String API_PATH_USER_REGISTER = "/register";
     public static final String API_PATH_USER_LOGIN = "/login";
     public static final String API_PATH_USER_COUNT = "/userCount";
+    public static final String API_PATH_USER_PROFILE = "/profile/{studentId}";
 
     @PostMapping(path = API_PATH_USER_REGISTER)
     public UserResponse register(@RequestBody UserRegistrationRequest request) {
@@ -38,6 +39,12 @@ public class UserController {
         long count = userService.getTotalUserCount();
         return ResponseEntity.ok(Collections.singletonMap("count", count));
     }
+
+    @GetMapping(API_PATH_USER_PROFILE)
+    public ResponseEntity<UserResponse> getProfile(@PathVariable String studentId) {
+        return ResponseEntity.ok(userService.getUserProfileByStudentId(studentId));
+    }
+
 
 }
 
