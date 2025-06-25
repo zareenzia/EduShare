@@ -2,9 +2,12 @@ package com.edushare.file_sharing_app_backend.controller;
 
 import com.edushare.file_sharing_app_backend.dto.AuthRequest;
 import com.edushare.file_sharing_app_backend.dto.AuthResponse;
+import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
+import com.edushare.file_sharing_app_backend.model.UserResponse;
 import com.edushare.file_sharing_app_backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,5 +44,11 @@ public class AuthController {
                 .status("SUCCESS")
                 .message("Login Successful")
                 .build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody @Validated UserRegistrationRequest request) {
+        UserResponse userResponse = authService.register(request);
+        return ResponseEntity.ok("User registered successfully");
     }
 }

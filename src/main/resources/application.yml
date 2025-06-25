@@ -32,5 +32,5 @@ spring:
 
 # The Following JWT config will be customized later
 jwt:
-  secret: supersecretkeyforsigningjwt # This needs to be changed later, long and complex
+  secret: supersecretkeyforsigningjwtbutithastobewaybiggerthanyouthinkHaHaHaHa # This needs to be changed later, long and complex
   expiration: 604800000 # 7 * 24 * 3600 * 1000 day:hr:sec:mil sec

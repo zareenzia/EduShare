@@ -11,17 +11,16 @@ import java.util.List;
 @Data
 @Builder
 public class AuthenticatedUser implements UserDetails {
-    private final Long id;
-    private final String userId;
+    private final String username;
     private final String email;
     private final String password;
     private final String roleName;
-    private final Boolean activationStatus;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public static UserDetails create(JwtUserData user) {
         List<GrantedAuthority> authorityList = List.of(user::roleName);
         return AuthenticatedUser.builder()
+                .username(user.username())
                 .email(user.email())
                 .password(user.password())
                 .roleName(user.roleName())
@@ -41,7 +40,7 @@ public class AuthenticatedUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userId;
+        return username;
     }
 
     @Override
@@ -59,9 +58,5 @@ public class AuthenticatedUser implements UserDetails {
         return true;
     }
 
-    @Override
-    public boolean isEnabled() {
-        return activationStatus != null && activationStatus;
-    }
 
 }

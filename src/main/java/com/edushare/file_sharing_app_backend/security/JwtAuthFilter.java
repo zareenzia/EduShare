@@ -15,8 +15,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.ACCOUNT_SUSPENDED;
-
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -34,9 +32,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                 if (Objects.nonNull(usernameFromToken) && SecurityContextHolder.getContext().getAuthentication() == null) {
                     final UserDetails userDetails = customUserDetailService.loadUserByUsername(usernameFromToken);
-                    if (!userDetails.isEnabled()) {
-                        response.sendError(HttpServletResponse.SC_FORBIDDEN, ACCOUNT_SUSPENDED);
-                    }
 
                     if (Boolean.TRUE.equals(jwtTokenUtil.validateToken(jwt, userDetails))) {
                         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
