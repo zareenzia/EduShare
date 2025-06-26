@@ -1,5 +1,6 @@
 package com.edushare.file_sharing_app_backend.service;
 
+import com.edushare.file_sharing_app_backend.exception.UserException;
 import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
 import com.edushare.file_sharing_app_backend.model.UserLoginRequest;
 import com.edushare.file_sharing_app_backend.model.UserResponse;
@@ -9,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.EMAIL_ALREADY_IN_USE;
+import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.USER_ALREADY_IN_USE;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -17,8 +21,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserResponse register(UserRegistrationRequest request) {
+
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new UserException(USER_ALREADY_IN_USE);
+        }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already in use.");
+            throw new UserException(EMAIL_ALREADY_IN_USE);
         }
 
         User user = new User();
