@@ -1,7 +1,6 @@
 package com.edushare.file_sharing_app_backend.controller;
 
 
-import com.edushare.file_sharing_app_backend.model.UserLoginRequest;
 import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
 import com.edushare.file_sharing_app_backend.model.UserResponse;
 import com.edushare.file_sharing_app_backend.service.UserService;
@@ -33,10 +32,10 @@ public class UserController {
         return userService.register(request);
     }
 
-    @PostMapping(path = API_PATH_USER_LOGIN)
-    public UserResponse login(@RequestBody UserLoginRequest request) {
-        return userService.login(request);
-    }
+//    @PostMapping(path = API_PATH_USER_LOGIN)
+//    public UserResponse login(@RequestBody UserLoginRequest request) {
+//        return userService.login(request);
+//    }
 
     @GetMapping(path = API_PATH_USER_COUNT)
     public ResponseEntity<Map<String, Long>> getUserCount() {

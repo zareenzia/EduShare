@@ -28,7 +28,7 @@ public class AuthService {
 
     public AuthResponse login(AuthRequest authRequest) {
 
-        User user = userRepository.findByUsername(authRequest.getUsername()).orElseThrow(() -> new InvalidCredentialException(INVALID_CREDENTIALS));
+        User user = userRepository.findByStudentId(authRequest.getStudentId()).orElseThrow(() -> new InvalidCredentialException(INVALID_CREDENTIALS));
 
         if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             throw new InvalidCredentialException(INVALID_CREDENTIALS);
@@ -36,6 +36,7 @@ public class AuthService {
 
         JwtUserData userData = JwtUserData.builder()
                 .username(user.getUsername())
+                .studentId(user.getStudentId())
                 .roleName(null) // Need to implement roles later
                 .email(user.getEmail())
                 .password(user.getPassword())
@@ -45,14 +46,15 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(generatedToken)
-                .username(user.getUsername())
+//                .username(user.getUsername())
+                .studentId(user.getStudentId())
                 .email(user.getEmail())
                 .build();
 
     }
 
     public UserResponse register(UserRegistrationRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.findByStudentId(request.getStudentId()).isPresent()) {
             throw new AuthException(USER_ALREADY_IN_USE);
         }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -61,6 +63,7 @@ public class AuthService {
 
         final User user = User.builder()
                 .username(request.getUsername())
+                .studentId(request.getStudentId())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
@@ -68,7 +71,7 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         UserResponse response = new UserResponse();
-        response.setId(savedUser.getId());
+        response.setStudentId(savedUser.getStudentId());
         response.setEmail(savedUser.getEmail());
 
         return response;

@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class AuthenticatedUser implements UserDetails {
     private final String username;
+    private final String studentId;
     private final String email;
     private final String password;
     private final String roleName;
@@ -21,6 +22,7 @@ public class AuthenticatedUser implements UserDetails {
         List<GrantedAuthority> authorityList = List.of(user::roleName);
         return AuthenticatedUser.builder()
                 .username(user.username())
+                .studentId(user.studentId())
                 .email(user.email())
                 .password(user.password())
                 .roleName(user.roleName())
@@ -40,6 +42,11 @@ public class AuthenticatedUser implements UserDetails {
 
     @Override
     public String getUsername() {
+        // Important: Using studentId as the username
+        return studentId;
+    }
+
+    public String getActualUsername() {
         return username;
     }
 
