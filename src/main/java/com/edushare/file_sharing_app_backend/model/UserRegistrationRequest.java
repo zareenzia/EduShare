@@ -11,4 +11,5 @@ public class UserRegistrationRequest {
     private String email;
     @NotNull
     private String password;
+    private String studentId;
 }
