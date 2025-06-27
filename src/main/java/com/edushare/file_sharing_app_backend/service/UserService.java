@@ -1,5 +1,6 @@
 package com.edushare.file_sharing_app_backend.service;
 
+import com.edushare.file_sharing_app_backend.dto.UserDto;
 import com.edushare.file_sharing_app_backend.exception.UserException;
 import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
 import com.edushare.file_sharing_app_backend.model.UserLoginRequest;
@@ -7,6 +8,7 @@ import com.edushare.file_sharing_app_backend.model.UserResponse;
 import com.edushare.file_sharing_app_backend.model.User;
 import com.edushare.file_sharing_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,23 +45,21 @@ public class UserService {
         return response;
     }
 
-//    public UserResponse login(UserLoginRequest request) {
-//        User user = userRepository.findByEmail(request.getEmail())
-//                .orElseThrow(() -> new RuntimeException("Invalid credentials."));
-//
-//        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-//            throw new RuntimeException("Invalid credentials.");
-//        }
-//
-//        UserResponse response = new UserResponse();
-//        response.setId(user.getId());
-//        response.setEmail(user.getEmail());
-//        return response;
-//    }
-
     public long getTotalUserCount() {
         return userRepository.count();
     }
 
+
+    public UserDto getUserProfileByStudentId(String studentId) {
+        User user = userRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with student ID: " + studentId));
+
+        // Convert User entity to DTO
+        UserDto dto = new UserDto();
+        dto.setStudentId(user.getStudentId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        return dto;
+    }
 }
 

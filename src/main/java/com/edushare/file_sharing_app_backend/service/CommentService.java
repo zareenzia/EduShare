@@ -37,4 +37,10 @@ public class CommentService {
 
         return commentRepository.findByFile(file);
     }
+
+    public void deleteCommentById(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found with ID: " + commentId));
+        commentRepository.delete(comment);
+    }
 }

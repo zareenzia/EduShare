@@ -42,4 +42,18 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+        try {
+            commentService.deleteCommentById(commentId);
+            return ResponseEntity.ok("Comment deleted successfully.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting comment.");
+        }
+    }
+
 }
