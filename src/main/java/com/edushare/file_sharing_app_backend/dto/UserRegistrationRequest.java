@@ -10,6 +10,8 @@ public class UserRegistrationRequest {
     @NotNull
     private String studentId;
     @NotNull
+    private String fullName;
+    @NotNull
     private String email;
     @NotNull
     private String password;

@@ -64,6 +64,7 @@ public class AuthService {
         final User user = User.builder()
                 .username(request.getUsername())
                 .studentId(request.getStudentId())
+                .fullName(request.getFullName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
@@ -72,6 +73,8 @@ public class AuthService {
 
         UserResponse response = new UserResponse();
         response.setStudentId(savedUser.getStudentId());
+        response.setUsername(savedUser.getUsername());
+        response.setFullName(savedUser.getFullName());
         response.setEmail(savedUser.getEmail());
 
         return response;
