@@ -26,7 +26,7 @@ public class JwtTokenUtil {
 
         return Jwts.builder()
                 .setClaims(prepareClaims(jwtUserData))
-                .setSubject(jwtUserData.username())
+                .setSubject(jwtUserData.studentId())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
@@ -35,15 +35,19 @@ public class JwtTokenUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String studentId = getStudentIdFromToken(token);
+        return (studentId.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtProperties.secret().getBytes());
     }
 
-    public String getUsernameFromToken(String token) {
+//    public String getUsernameFromToken(String token) {
+//        return getClaimFromToken(token, Claims::getSubject);
+//    }
+
+    public String getStudentIdFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -79,6 +83,7 @@ public class JwtTokenUtil {
         claims.put("roleName", jwtUserData.roleName());
         claims.put("email", jwtUserData.email());
         claims.put("username", jwtUserData.username());
+        claims.put("studentId", jwtUserData.studentId());
         // Add other claims as needed
 
         return claims;

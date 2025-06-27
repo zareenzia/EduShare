@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.INVALID_CREDENTIALS;
-import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.USERNAME_PASSWORD_CAN_NOT_BE_NULL;
+import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.STUDENT_ID_PASSWORD_CAN_NOT_BE_NULL;
 import static com.edushare.file_sharing_app_backend.util.ResponseUtil.successResponse;
 
 @RestController()
@@ -33,13 +33,13 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public AuthResponse login(@RequestBody @Validated AuthRequest authRequest) {
 
-        if (Objects.isNull(authRequest.getUsername()) || Objects.isNull(authRequest.getPassword())) {
-            throw new AuthException(USERNAME_PASSWORD_CAN_NOT_BE_NULL);
+        if (Objects.isNull(authRequest.getStudentId()) || Objects.isNull(authRequest.getPassword())) {
+            throw new IllegalArgumentException(STUDENT_ID_PASSWORD_CAN_NOT_BE_NULL);
         }
         AuthResponse response = authService.login(authRequest);
 
         if (Objects.isNull(response)) {
-            throw new AuthException(INVALID_CREDENTIALS);
+            throw new IllegalArgumentException(INVALID_CREDENTIALS);
         }
 
         return response.toBuilder()
@@ -49,8 +49,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody @Validated UserRegistrationRequest request) {
+    public ResponseEntity<?> register(@RequestBody @Validated UserRegistrationRequest request) {
         UserResponse userResponse = authService.register(request);
-        return successResponse("User registered successfully", userResponse, HttpStatus.CREATED);
+        return ResponseEntity.ok("User registered successfully");
     }
 }

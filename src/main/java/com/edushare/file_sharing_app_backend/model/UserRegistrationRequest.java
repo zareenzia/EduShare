@@ -8,6 +8,8 @@ public class UserRegistrationRequest {
     @NotNull
     private String username;
     @NotNull
+    private String studentId;
+    @NotNull
     private String email;
     @NotNull
     private String password;

@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record JwtUserData(
         String username,
+        String studentId,
         String roleName,
         String email,
         String password) {

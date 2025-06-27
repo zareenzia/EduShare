@@ -22,7 +22,7 @@ public class UserService {
 
     public UserResponse register(UserRegistrationRequest request) {
 
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.findByStudentId(request.getStudentId()).isPresent()) {
             throw new UserException(USER_ALREADY_IN_USE);
         }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -31,30 +31,31 @@ public class UserService {
 
         User user = new User();
         user.setUsername(request.getUsername());
+        user.setStudentId(request.getStudentId());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         User savedUser = userRepository.save(user);
 
         UserResponse response = new UserResponse();
-        response.setId(savedUser.getId());
+        response.setStudentId(savedUser.getStudentId());
         response.setEmail(savedUser.getEmail());
         return response;
     }
 
-    public UserResponse login(UserLoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials."));
-
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials.");
-        }
-
-        UserResponse response = new UserResponse();
-        response.setId(user.getId());
-        response.setEmail(user.getEmail());
-        return response;
-    }
+//    public UserResponse login(UserLoginRequest request) {
+//        User user = userRepository.findByEmail(request.getEmail())
+//                .orElseThrow(() -> new RuntimeException("Invalid credentials."));
+//
+//        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+//            throw new RuntimeException("Invalid credentials.");
+//        }
+//
+//        UserResponse response = new UserResponse();
+//        response.setId(user.getId());
+//        response.setEmail(user.getEmail());
+//        return response;
+//    }
 
     public long getTotalUserCount() {
         return userRepository.count();

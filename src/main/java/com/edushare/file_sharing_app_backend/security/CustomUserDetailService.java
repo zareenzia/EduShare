@@ -17,14 +17,15 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String studentId) throws UsernameNotFoundException {
 
         User user = userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+                .findByStudentId(studentId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with Student ID: " + studentId));
 
         return AuthenticatedUser.create(JwtUserData.builder()
                 .username(user.getUsername())
+                .studentId(user.getStudentId())
                 .email(user.getEmail())
                 .password(user.getPassword())
 //                .roleName(user.getRole() == null ? null : user.getRole().getRoleName())
