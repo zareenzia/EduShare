@@ -1,7 +1,7 @@
 package com.edushare.file_sharing_app_backend.config;
 
+import com.edushare.file_sharing_app_backend.security.CustomAuthEntryPoint;
 import com.edushare.file_sharing_app_backend.security.JwtAuthFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +29,7 @@ import java.util.List;
 public class SecurityConfig{
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
 
 
     @Bean
@@ -61,9 +62,7 @@ public class SecurityConfig{
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request,
-                                                   response,
-                                                   authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                        .authenticationEntryPoint(customAuthEntryPoint)
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
