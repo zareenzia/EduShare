@@ -1,5 +1,6 @@
-package com.edushare.file_sharing_app_backend.model;
+package com.edushare.file_sharing_app_backend.dto;
 
+import com.edushare.file_sharing_app_backend.model.Comment;
 import lombok.*;
 
 import java.util.List;

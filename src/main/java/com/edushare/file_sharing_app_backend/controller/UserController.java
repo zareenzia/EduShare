@@ -2,8 +2,8 @@ package com.edushare.file_sharing_app_backend.controller;
 
 
 import com.edushare.file_sharing_app_backend.dto.UserDto;
-import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
-import com.edushare.file_sharing_app_backend.model.UserResponse;
+import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
+import com.edushare.file_sharing_app_backend.dto.UserResponse;
 import com.edushare.file_sharing_app_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

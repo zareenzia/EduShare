@@ -1,8 +1,8 @@
 package com.edushare.file_sharing_app_backend.controller;
 
-import com.edushare.file_sharing_app_backend.model.FileDetailsDto;
+import com.edushare.file_sharing_app_backend.dto.FileDetailsDto;
 import com.edushare.file_sharing_app_backend.model.FileMetadata;
-import com.edushare.file_sharing_app_backend.model.PaginatedResponse;
+import com.edushare.file_sharing_app_backend.dto.PaginatedResponse;
 import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
 import com.edushare.file_sharing_app_backend.service.GCSFileService;
 import lombok.RequiredArgsConstructor;

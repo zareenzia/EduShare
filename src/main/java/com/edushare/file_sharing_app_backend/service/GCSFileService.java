@@ -1,13 +1,14 @@
 package com.edushare.file_sharing_app_backend.service;
 
+import com.edushare.file_sharing_app_backend.dto.FileDetailsDto;
+import com.edushare.file_sharing_app_backend.dto.FileMetadataDto;
+import com.edushare.file_sharing_app_backend.dto.PaginatedResponse;
 import com.edushare.file_sharing_app_backend.model.*;
 import com.edushare.file_sharing_app_backend.repository.CommentRepository;
 import com.edushare.file_sharing_app_backend.repository.FileMetadataRepository;
 import com.google.cloud.storage.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 

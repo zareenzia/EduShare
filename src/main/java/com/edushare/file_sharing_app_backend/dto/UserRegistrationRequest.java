@@ -1,4 +1,4 @@
-package com.edushare.file_sharing_app_backend.model;
+package com.edushare.file_sharing_app_backend.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

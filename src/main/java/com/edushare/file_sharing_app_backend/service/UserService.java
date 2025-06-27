@@ -2,9 +2,8 @@ package com.edushare.file_sharing_app_backend.service;
 
 import com.edushare.file_sharing_app_backend.dto.UserDto;
 import com.edushare.file_sharing_app_backend.exception.UserException;
-import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
-import com.edushare.file_sharing_app_backend.model.UserLoginRequest;
-import com.edushare.file_sharing_app_backend.model.UserResponse;
+import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
+import com.edushare.file_sharing_app_backend.dto.UserResponse;
 import com.edushare.file_sharing_app_backend.model.User;
 import com.edushare.file_sharing_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
