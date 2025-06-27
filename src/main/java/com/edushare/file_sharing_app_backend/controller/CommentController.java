@@ -20,7 +20,6 @@ public class CommentController {
     public static final String API_PATH_COMMENT_ADD = "/add";
     public static final String API_PATH_COMMENT_GET = "/file/{fileId}";
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(path = API_PATH_COMMENT_ADD, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Comment> addComment(@RequestParam Long fileId,
                                               @RequestParam String username,
@@ -43,7 +42,6 @@ public class CommentController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping("/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
         try {

@@ -1,4 +1,4 @@
-package com.edushare.file_sharing_app_backend.model;
+package com.edushare.file_sharing_app_backend.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -9,6 +9,8 @@ public class UserRegistrationRequest {
     private String username;
     @NotNull
     private String studentId;
+    @NotNull
+    private String fullName;
     @NotNull
     private String email;
     @NotNull

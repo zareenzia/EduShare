@@ -5,8 +5,8 @@ import com.edushare.file_sharing_app_backend.dto.AuthResponse;
 import com.edushare.file_sharing_app_backend.exception.AuthException;
 import com.edushare.file_sharing_app_backend.exception.InvalidCredentialException;
 import com.edushare.file_sharing_app_backend.model.User;
-import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
-import com.edushare.file_sharing_app_backend.model.UserResponse;
+import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
+import com.edushare.file_sharing_app_backend.dto.UserResponse;
 import com.edushare.file_sharing_app_backend.repository.UserRepository;
 import com.edushare.file_sharing_app_backend.security.JwtTokenUtil;
 import com.edushare.file_sharing_app_backend.security.JwtUserData;
@@ -46,7 +46,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(generatedToken)
-//                .username(user.getUsername())
+                .username(user.getUsername())
                 .studentId(user.getStudentId())
                 .email(user.getEmail())
                 .build();
@@ -64,6 +64,7 @@ public class AuthService {
         final User user = User.builder()
                 .username(request.getUsername())
                 .studentId(request.getStudentId())
+                .fullName(request.getFullName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
@@ -72,6 +73,8 @@ public class AuthService {
 
         UserResponse response = new UserResponse();
         response.setStudentId(savedUser.getStudentId());
+        response.setUsername(savedUser.getUsername());
+        response.setFullName(savedUser.getFullName());
         response.setEmail(savedUser.getEmail());
 
         return response;

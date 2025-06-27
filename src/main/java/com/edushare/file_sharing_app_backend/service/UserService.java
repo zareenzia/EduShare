@@ -2,9 +2,8 @@ package com.edushare.file_sharing_app_backend.service;
 
 import com.edushare.file_sharing_app_backend.dto.UserDto;
 import com.edushare.file_sharing_app_backend.exception.UserException;
-import com.edushare.file_sharing_app_backend.model.UserRegistrationRequest;
-import com.edushare.file_sharing_app_backend.model.UserLoginRequest;
-import com.edushare.file_sharing_app_backend.model.UserResponse;
+import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
+import com.edushare.file_sharing_app_backend.dto.UserResponse;
 import com.edushare.file_sharing_app_backend.model.User;
 import com.edushare.file_sharing_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +33,18 @@ public class UserService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setStudentId(request.getStudentId());
+        user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         User savedUser = userRepository.save(user);
 
-        UserResponse response = new UserResponse();
-        response.setStudentId(savedUser.getStudentId());
-        response.setEmail(savedUser.getEmail());
-        return response;
+        return UserResponse.builder()
+                .username(savedUser.getUsername())
+                .studentId(savedUser.getStudentId())
+                .fullName(savedUser.getFullName())
+                .email(savedUser.getEmail())
+                .build();
     }
 
     public long getTotalUserCount() {
@@ -59,6 +61,7 @@ public class UserService {
         dto.setStudentId(user.getStudentId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
         return dto;
     }
 }
