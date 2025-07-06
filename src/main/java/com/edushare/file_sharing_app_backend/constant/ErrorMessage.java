@@ -1,7 +1,7 @@
 package com.edushare.file_sharing_app_backend.constant;
 
 public final class ErrorMessage {
-    public static final String INVALID_CREDENTIALS = "Invalid student ID or password";
+    public static final String INVALID_CREDENTIALS = "Invalid Student ID or Password";
     public static final String USERNAME_NOT_FOUND = "Username not found";
     public static final String USER_ALREADY_EXISTS = "User already exists";
     public static final String FILE_NOT_FOUND = "File not found";
