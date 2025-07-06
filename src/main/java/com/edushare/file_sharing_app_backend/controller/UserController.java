@@ -1,10 +1,12 @@
 package com.edushare.file_sharing_app_backend.controller;
 
 
+import com.edushare.file_sharing_app_backend.dto.ApiResponse;
 import com.edushare.file_sharing_app_backend.dto.UserDto;
 import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
 import com.edushare.file_sharing_app_backend.dto.UserResponse;
 import com.edushare.file_sharing_app_backend.service.UserService;
+import com.edushare.file_sharing_app_backend.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,9 +41,10 @@ public class UserController {
 
     @GetMapping("/profile/{studentId}")
     // @PreAuthorize("hasAuthority('STUDENT') or hasAuthority('ADMIN')") // Optional: restrict by role
-    public ResponseEntity<UserDto> getUserProfile(@PathVariable String studentId) {
+    public ResponseEntity<ApiResponse<UserDto>> getUserProfile(@PathVariable String studentId) {
         UserDto user = userService.getUserProfileByStudentId(studentId);
-        return ResponseEntity.ok(user);
+        return ResponseUtil.successResponse(user, "User profile retrieved successfully");
+
     }
 }
 

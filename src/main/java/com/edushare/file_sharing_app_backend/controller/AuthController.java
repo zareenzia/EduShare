@@ -1,14 +1,17 @@
 package com.edushare.file_sharing_app_backend.controller;
 
+import com.edushare.file_sharing_app_backend.dto.ApiResponse;
 import com.edushare.file_sharing_app_backend.dto.AuthRequest;
 import com.edushare.file_sharing_app_backend.dto.AuthResponse;
 import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
 import com.edushare.file_sharing_app_backend.dto.UserResponse;
+import com.edushare.file_sharing_app_backend.exception.AuthException;
 import com.edushare.file_sharing_app_backend.service.AuthService;
+import com.edushare.file_sharing_app_backend.util.ResponseUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.INVALID_CREDENTIALS;
-import static com.edushare.file_sharing_app_backend.constant.ErrorMessage.STUDENT_ID_PASSWORD_CAN_NOT_BE_NULL;
 
 @RestController()
 @RequestMapping("/api/v1/auth")
@@ -29,15 +31,12 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public AuthResponse login(@RequestBody @Validated AuthRequest authRequest) {
+    public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
 
-        if (Objects.isNull(authRequest.getStudentId()) || Objects.isNull(authRequest.getPassword())) {
-            throw new IllegalArgumentException(STUDENT_ID_PASSWORD_CAN_NOT_BE_NULL);
-        }
         AuthResponse response = authService.login(authRequest);
 
         if (Objects.isNull(response)) {
-            throw new IllegalArgumentException(INVALID_CREDENTIALS);
+            throw new AuthException(INVALID_CREDENTIALS);
         }
 
         return response.toBuilder()
@@ -47,8 +46,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Validated UserRegistrationRequest request) {
+    public ResponseEntity<ApiResponse<Object>> register(@RequestBody @Valid UserRegistrationRequest request) {
         UserResponse userResponse = authService.register(request);
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseUtil.createdResponse(userResponse, "User registered successfully");
     }
 }
