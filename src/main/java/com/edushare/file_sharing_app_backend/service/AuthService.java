@@ -2,11 +2,10 @@ package com.edushare.file_sharing_app_backend.service;
 
 import com.edushare.file_sharing_app_backend.dto.AuthRequest;
 import com.edushare.file_sharing_app_backend.dto.AuthResponse;
-import com.edushare.file_sharing_app_backend.exception.AuthException;
-import com.edushare.file_sharing_app_backend.exception.InvalidCredentialException;
-import com.edushare.file_sharing_app_backend.model.User;
 import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
 import com.edushare.file_sharing_app_backend.dto.UserResponse;
+import com.edushare.file_sharing_app_backend.exception.AuthException;
+import com.edushare.file_sharing_app_backend.model.User;
 import com.edushare.file_sharing_app_backend.repository.UserRepository;
 import com.edushare.file_sharing_app_backend.security.JwtTokenUtil;
 import com.edushare.file_sharing_app_backend.security.JwtUserData;
@@ -28,10 +27,10 @@ public class AuthService {
 
     public AuthResponse login(AuthRequest authRequest) {
 
-        User user = userRepository.findByStudentId(authRequest.getStudentId()).orElseThrow(() -> new InvalidCredentialException(INVALID_CREDENTIALS));
+        User user = userRepository.findByStudentId(authRequest.getStudentId()).orElseThrow(() -> new AuthException(INVALID_CREDENTIALS));
 
         if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-            throw new InvalidCredentialException(INVALID_CREDENTIALS);
+            throw new AuthException(INVALID_CREDENTIALS);
         }
 
         JwtUserData userData = JwtUserData.builder()

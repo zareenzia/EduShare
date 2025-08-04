@@ -1,13 +1,13 @@
 package com.edushare.file_sharing_app_backend.service;
 
 import com.edushare.file_sharing_app_backend.dto.UserDto;
-import com.edushare.file_sharing_app_backend.exception.UserException;
 import com.edushare.file_sharing_app_backend.dto.UserRegistrationRequest;
 import com.edushare.file_sharing_app_backend.dto.UserResponse;
+import com.edushare.file_sharing_app_backend.exception.ResourceNotFoundException;
+import com.edushare.file_sharing_app_backend.exception.UserException;
 import com.edushare.file_sharing_app_backend.model.User;
 import com.edushare.file_sharing_app_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class UserService {
 
     public UserDto getUserProfileByStudentId(String studentId) {
         User user = userRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with student ID: " + studentId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with Student ID: " + studentId));
 
         // Convert User entity to DTO
         UserDto dto = new UserDto();
